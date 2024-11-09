@@ -1,8 +1,14 @@
 
+package mksEngine;
+
 public class Vector2d {
     private float x;
     private float y;
 
+    /**
+     * @param x
+     * @param y
+     */
     public Vector2d(float x, float y) {
 
         setX(x);
