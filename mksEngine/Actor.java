@@ -1,62 +1,161 @@
 package mksEngine;
 
+import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+
+import javax.imageio.ImageIO;
 
 public abstract class Actor extends Thread {
 
+    protected final class WorldDirection {
+        public final static Vector2d RIGTH = new Vector2d(1, 0);
+        public final static Vector2d LEFT = Math.inverse(RIGTH);
+        public final static Vector2d UP = new Vector2d(0, -1);
+        public final static Vector2d DOWN = Math.inverse(UP);
+    }
+
+    protected final class Look {
+        private boolean isActive;
+        private BufferedImage look;
+        private String name;
+
+        public boolean isActive() {
+            return isActive;
+        }
+
+        public BufferedImage getLook() {
+            return look;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
     private Vector2d location;
-    private Image image;
+    private HashMap<String, Look> looks = new HashMap<>();
     private String actorName;
     private Vector2d localRightDirection = WorldDirection.RIGTH;
     private Vector2d localLeftDirection = WorldDirection.LEFT;
     private Vector2d localUpDirection = WorldDirection.UP;
     private Vector2d localDownDirection = WorldDirection.DOWN;
+    private boolean isAlive = true;
+    private Color areaColor = Color.black;
+    private int width = 50;
+    private int height = 50;
 
-    public Vector2d getLocalRightDirection() {
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public Color getAreaColor() {
+        return areaColor;
+    }
+
+    public void setAreaColor(Color areaColor) {
+        this.areaColor = areaColor;
+    }
+
+    final boolean isStillAlive() {
+        return isAlive;
+    }
+
+    protected final boolean addLook(String name, String lookURL, boolean isActive) {
+        try {
+            looks.put(name, createNewLook(name, lookURL, isActive));
+            return true;
+        } catch (IOException ex) {
+            return false;
+        }
+    }
+
+    private final Look createNewLook(String name, String lookURL, boolean isActive) throws IOException {
+        Look newLook = new Look();
+        newLook.name = name;
+        newLook.look = ImageIO.read(new File(lookURL));
+        if (isActive)
+            deActivateAllLooks();
+
+        newLook.isActive = isActive;
+        return newLook;
+    }
+
+    private void deActivateAllLooks() {
+        looks.forEach((t, u) -> {
+            u.isActive = false;
+        });
+    }
+
+    protected final Look getLook(String name) {
+        try {
+            return looks.get(name);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    protected Vector2d getLocalRightDirection() {
         return localRightDirection;
     }
 
-    public Vector2d getLocalLeftDirection() {
+    protected Vector2d getLocalLeftDirection() {
         return localLeftDirection;
     }
 
-    public Vector2d getLocalUpDirection() {
+    protected Vector2d getLocalUpDirection() {
         return localUpDirection;
     }
 
-    public Vector2d getLocalDownDirection() {
+    protected Vector2d getLocalDownDirection() {
         return localDownDirection;
     }
 
-    public String getActorName() {
+    protected String getActorName() {
         return actorName;
     }
 
-    public void setActorName(String name) {
+    protected final void setActorName(String name) {
         this.actorName = name;
     }
 
-    public Vector2d getLocation() {
+    protected Vector2d getLocation() {
         return location;
     }
 
-    public void setLocation(Vector2d location) {
+    protected final void setLocation(float x, float y) {
+        setLocation(new Vector2d(x, y));
+    }
+
+    protected final void setLocation(Vector2d location) {
         this.location = location;
     }
 
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
-    void render(Graphics g) {
+    final void render(Graphics g) {
         int x = java.lang.Math.round(getLocation().getX());
         int y = java.lang.Math.round(getLocation().getY());
-        g.drawRect(x, y, 100, 100);
+
+        if (looks.size() == 0) {
+            g.setColor(getAreaColor());
+            g.fillRect(x, y, getWidth(), getHeight());
+        } else {
+            // TODO: Draw Image here
+        }
     }
 
     @Override
@@ -65,73 +164,84 @@ public abstract class Actor extends Thread {
                 getName(), getLocation().getX(), getLocation().getY());
     }
 
-    public class WorldDirection {
-        public final static Vector2d RIGTH = new Vector2d(1, 0);
-        public final static Vector2d LEFT = Math.inverse(RIGTH);
-        public final static Vector2d UP = new Vector2d(0, -1);
-        public final static Vector2d DOWN = Math.inverse(UP);
-    }
-
-    public Vector2d move(float steps, Vector2d direction) {
+    protected final Vector2d move(float steps, Vector2d direction) {
         var newLocation = Math.addVectors(getLocation(), Math.scaleVector(steps, direction));
         setLocation(newLocation);
         return getLocation();
     }
 
-    public Vector2d moveRight(float steps) {
+    protected final Vector2d moveRight(float steps) {
         var newLocation = Math.addVectors(getLocation(), Math.scaleVector(steps, WorldDirection.RIGTH));
         setLocation(newLocation);
         return getLocation();
     }
 
-    public Vector2d moveLeft(float steps) {
+    protected final Vector2d moveLeft(float steps) {
         var newLocation = Math.addVectors(getLocation(), Math.scaleVector(steps, WorldDirection.LEFT));
         setLocation(newLocation);
         return getLocation();
     }
 
-    public Vector2d moveUp(float steps) {
+    protected final Vector2d moveUp(float steps) {
         var newLocation = Math.addVectors(getLocation(), Math.scaleVector(steps, WorldDirection.UP));
         setLocation(newLocation);
         return getLocation();
     }
 
-    public Vector2d moveDown(float steps) {
+    protected final Vector2d moveDown(float steps) {
         var newLocation = Math.addVectors(getLocation(), Math.scaleVector(steps, WorldDirection.DOWN));
         setLocation(newLocation);
         return getLocation();
     }
 
-    public void turnClockwise(float degree) {
+    protected final void turnClockwise(float degree) {
         updateLocalDirection(degree);
 
     }
 
-    private void updateLocalDirection(float degree) {
+    private final void updateLocalDirection(float degree) {
         localRightDirection = Math.rotate(degree, localRightDirection);
         localDownDirection = Math.rotate(degree, localDownDirection);
         localLeftDirection = Math.rotate(degree, localLeftDirection);
         localUpDirection = Math.rotate(degree, localUpDirection);
     }
 
-    public void turnClockwiseC(float degree) {
+    protected final void turnClockwiseC(float degree) {
         updateLocalDirection(degree);
-
+        // TODO write the code here
     }
 
     @Override
     public final void run() {
-        while (true) {
+        while (isAlive) {
             update();
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 
     protected abstract void update();
 
-    protected abstract void begin();
+    protected void begin() {
+        setActorName("actor");
+        setLocation(0, 0);
+    }
 
-    public Actor() {
+    protected Actor() {
         begin();
+        start();
+    }
+
+    protected final void destroy() {
+        if (isAlive) {
+            System.err.println("Destroy Actor " + getActorName());
+            isAlive = false;
+            Stage.destroyActor(this);
+        }
     }
 
 }
