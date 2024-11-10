@@ -245,3 +245,37 @@ public abstract class Actor extends Thread {
     }
 
 }
+
+
+
+/* 
+public class DeltaTimeExample {
+public static void main(String[] args) {
+    // Variable to store the last time in nanoseconds
+    long lastTime = System.nanoTime();
+    double deltaTime;
+
+    // Main loop (this would typically run in a game or rendering loop)
+    while (true) {
+        // Calculate the current time in nanoseconds
+        long currentTime = System.nanoTime();
+
+        // Calculate delta time in seconds
+        deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
+
+        // Update lastTime to the current time for the next frame
+        lastTime = currentTime;
+
+        // Print deltaTime for each frame
+        System.out.printf("Delta time (seconds): %.6f%n", deltaTime);
+
+        // Simulate work done in the frame (replace with actual frame logic)
+        try {
+            Thread.sleep(16); // Sleep for roughly 16ms to simulate ~60 FPS
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+}
+*/
