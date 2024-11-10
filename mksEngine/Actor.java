@@ -128,4 +128,10 @@ public abstract class Actor extends Thread {
 
     protected abstract void update();
 
+    protected abstract void begin();
+
+    public Actor() {
+        begin();
+    }
+
 }
