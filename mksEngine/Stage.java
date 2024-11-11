@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 
 public class Stage extends JPanel implements Runnable {
 
+    public static final int FRAMES_PER_SECOND = 40;
+    public final static int FPS = (1 / Stage.FRAMES_PER_SECOND) * 1000;
     private static Vector<Actor> actors = new Vector<Actor>();
     private static boolean isAlive = true;
 

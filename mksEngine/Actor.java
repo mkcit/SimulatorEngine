@@ -213,18 +213,23 @@ public abstract class Actor extends Thread {
 
     @Override
     public final void run() {
+
+        long lastTime = System.nanoTime();
+        float deltaTime;
         while (isAlive) {
-            update();
+            long currentTime = System.nanoTime();
+            deltaTime = (currentTime - lastTime) / 1_000_000_000.0f;
+            update(deltaTime);
+            lastTime = currentTime;
             try {
-                Thread.sleep(50);
+                Thread.sleep(Stage.FPS); // refresh 40 frame per second.
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
     }
 
-    protected abstract void update();
+    protected abstract void update(float deltaTime);
 
     protected void begin() {
         setActorName("actor");
@@ -246,36 +251,34 @@ public abstract class Actor extends Thread {
 
 }
 
-
-
-/* 
-public class DeltaTimeExample {
-public static void main(String[] args) {
-    // Variable to store the last time in nanoseconds
-    long lastTime = System.nanoTime();
-    double deltaTime;
-
-    // Main loop (this would typically run in a game or rendering loop)
-    while (true) {
-        // Calculate the current time in nanoseconds
-        long currentTime = System.nanoTime();
-
-        // Calculate delta time in seconds
-        deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
-
-        // Update lastTime to the current time for the next frame
-        lastTime = currentTime;
-
-        // Print deltaTime for each frame
-        System.out.printf("Delta time (seconds): %.6f%n", deltaTime);
-
-        // Simulate work done in the frame (replace with actual frame logic)
-        try {
-            Thread.sleep(16); // Sleep for roughly 16ms to simulate ~60 FPS
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-}
-*/
+/*
+ * public class DeltaTimeExample {
+ * public static void main(String[] args) {
+ * // Variable to store the last time in nanoseconds
+ * long lastTime = System.nanoTime();
+ * double deltaTime;
+ * 
+ * // Main loop (this would typically run in a game or rendering loop)
+ * while (true) {
+ * // Calculate the current time in nanoseconds
+ * long currentTime = System.nanoTime();
+ * 
+ * // Calculate delta time in seconds
+ * deltaTime = (currentTime - lastTime) / 1_000_000_000.0;
+ * 
+ * // Update lastTime to the current time for the next frame
+ * lastTime = currentTime;
+ * 
+ * // Print deltaTime for each frame
+ * System.out.printf("Delta time (seconds): %.6f%n", deltaTime);
+ * 
+ * // Simulate work done in the frame (replace with actual frame logic)
+ * try {
+ * Thread.sleep(16); // Sleep for roughly 16ms to simulate ~60 FPS
+ * } catch (InterruptedException e) {
+ * e.printStackTrace();
+ * }
+ * }
+ * }
+ * }
+ */

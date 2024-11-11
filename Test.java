@@ -10,9 +10,9 @@ public class Test {
         Stage s = new Stage();
         s.setBackground(Color.black);
         Bar b = new Bar();
-        Bar2 b2 = new Bar2();
+        // Bar2 b2 = new Bar2();
         Stage.spawnActor(b);
-        Stage.spawnActor(b2);
+        // Stage.spawnActor(b2);
 
 
         frm.add(s);

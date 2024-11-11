@@ -11,6 +11,7 @@ public class Bar2 extends Bar {
         setWidth(10);
         setHeight(400);
         setAreaColor(Color.green);
+
     }
 
 }

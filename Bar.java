@@ -3,6 +3,7 @@ import java.awt.Color;
 
 import mksEngine.Actor;
 import mksEngine.Vector2d;
+import static mksEngine.Math.*;
 
 public class Bar extends Actor {
 
@@ -21,15 +22,28 @@ public class Bar extends Actor {
         setAreaColor(Color.red);
         // addLook(getActorName() + "-1", "", true);
 
+        // float dotProduct = dotProduct(new Vector2d(0.7f, 0.7f),
+        // new Vector2d(-0.7f, -0.7f));
+        // System.err.println(dotProduct);
+
+        Vector2d reflect = reflect(new Vector2d(-150, 20), new Vector2d(1, 1));
+        System.err.println(reflect);
+
     }
 
+    float timer = 0;
+    private Vector2d lerp;
+
     @Override
-    protected void update() {
-        move(speed, WorldDirection.RIGTH);
-        // if (getLocation().getX() > 50) {
-        // destroy();
-        // }
-        // System.err.println(getLocation());
+    protected void update(float deltaTime) {
+
+        // timer += deltaTime;
+
+        // lerp = mksEngine.Math.lerp(getLocation(), new Vector2d(850, 0), deltaTime *
+        // 3);
+
+        // setLocation(lerp);
+        // System.out.println(lerp);
     }
 
 }
