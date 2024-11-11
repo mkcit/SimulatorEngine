@@ -1,7 +1,6 @@
 package mksEngine;
 
 public class Math {
-    private static Vector2d subVectors;
 
     /**
      * @param vec1
@@ -43,7 +42,7 @@ public class Math {
      * @return
      */
     public static Vector2d normalize(Vector2d vec) {
-        float magnitude = distance(vec);
+        float magnitude = magnitude(vec);
         if (magnitude != 0)
             return new Vector2d(vec.getX() / magnitude, vec.getY() / magnitude);
         return new Vector2d(0, 0);
@@ -55,7 +54,11 @@ public class Math {
         return (float) java.lang.Math.sqrt(nVector.getX() * nVector.getX() + nVector.getY() * nVector.getY());
     }
 
-    public static float distance(Vector2d vec) {
+    /**
+     * @param vec
+     * @return
+     */
+    public static float magnitude(Vector2d vec) {
         return (float) distance(new Vector2d(0, 0), vec);
     }
 
@@ -77,10 +80,15 @@ public class Math {
         return new Vector2d(newX, newY);
     }
 
+    /**
+     * @param vec1
+     * @param vec2
+     * @return
+     */
     public static float angleBetween(Vector2d vec1, Vector2d vec2) {
         float dotProduct = dotProduct(vec1, vec2);
-        float magnitude1 = distance(vec1);
-        float magnitude2 = distance(vec2);
+        float magnitude1 = magnitude(vec1);
+        float magnitude2 = magnitude(vec2);
 
         float cosTheta = dotProduct / (magnitude1 * magnitude2);
 
@@ -88,21 +96,47 @@ public class Math {
                 java.lang.Math.acos(cosTheta));
     }
 
+    /**
+     * @param vec1
+     * @param vec2
+     * @return
+     */
     public static float dotProduct(Vector2d vec1, Vector2d vec2) {
         return vec1.getX() * vec2.getX() + vec1.getY() * vec2.getY();
     }
 
+    /**
+     * @param source 
+     * @param target
+     * @param time
+     * @return 
+     */
     public static Vector2d lerp(Vector2d source, Vector2d target, float time) {
-        time = java.lang.Math.max(0, java.lang.Math.min(1, time)); // Clamp time to the [0 and 1]
+        time = clamp(time, 0, 1); // Clamp time to the [0 and 1]
         float newX = source.getX() + time * (target.getX() - source.getX());
         float newY = source.getY() + time * (target.getY() - source.getY());
 
         return new Vector2d(newX, newY);
     }
 
+    /**
+     * @param value
+     * @param min
+     * @param max
+     * @return
+     */
+    public static float clamp(float value, float min, float max) {
+        return java.lang.Math.max(min, java.lang.Math.min(max, value));
+    }
+
+    /**
+     * @param incomeVec
+     * @param normalVec
+     * @return
+     */
     public static final Vector2d reflect(Vector2d incomeVec, Vector2d normalVec) {
         Vector2d normalVector = normalize(normalVec);
-       //Vector2d incomeVector = normalize(incomeVec);
+        // Vector2d incomeVector = normalize(incomeVec);
 
         float dotProduct = dotProduct(normalVector, incomeVec);
 

@@ -18,25 +18,25 @@ public class Vector2d {
     /**
      * @return 
      */
-    public float getX() {
+    public final float getX() {
         return x;
     }
 
     /**
      * @param x
      */
-    public void setX(float x) {
+    public final void setX(float x) {
         this.x = x;
     }
 
-    public float getY() {
+    public final float getY() {
         return y;
     }
 
     /**
      * @param y
      */
-    public void setY(float y) {
+    public final void setY(float y) {
         this.y = y;
     }
 

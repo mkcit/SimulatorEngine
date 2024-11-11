@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 public class Stage extends JPanel implements Runnable {
 
-    public static final int FRAMES_PER_SECOND = 40;
+    public static final int FRAMES_PER_SECOND = 10;
     public final static int FPS = (1 / Stage.FRAMES_PER_SECOND) * 1000;
     private static Vector<Actor> actors = new Vector<Actor>();
     private static boolean isAlive = true;
@@ -33,6 +33,10 @@ public class Stage extends JPanel implements Runnable {
 
     }
 
+    /**
+     * @param actor
+     * @return
+     */
     public static final boolean spawnActor(Actor actor) {
         if (actors != null) {
             System.err.println("Yes it's a live");
@@ -47,7 +51,12 @@ public class Stage extends JPanel implements Runnable {
         return false;
     }
 
-    static final boolean destroyActor(Actor actor) {
+    /**
+     * @param actor
+     * @return
+     */
+    
+    public static final boolean destroyActor(Actor actor) {
         return actors.remove(actor);
     }
 
@@ -56,7 +65,7 @@ public class Stage extends JPanel implements Runnable {
         while (isAlive) {
             repaint();
             try {
-                Thread.sleep(50);
+                Thread.sleep(FPS);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -64,7 +73,8 @@ public class Stage extends JPanel implements Runnable {
         }
     }
 
-    public static void stop() {
+
+    public final static void stop() {
         Stage.actors = null;
         Stage.isAlive = false;
     }

@@ -8,6 +8,8 @@ import static mksEngine.Math.*;
 public class Bar extends Actor {
 
     protected float speed;
+    protected int targetX;
+    protected int targetY;
 
     @Override
     protected void begin() {
@@ -29,20 +31,33 @@ public class Bar extends Actor {
         Vector2d reflect = reflect(new Vector2d(-150, 20), new Vector2d(1, 1));
         System.err.println(reflect);
 
+        targetX = 850;
+        targetY = 450;
+
     }
 
     float timer = 0;
     private Vector2d lerp;
+    float value = 0.5f;
+    float counter = 1;
 
     @Override
     protected void update(float deltaTime) {
+        // System.err.println(clamp(deltaTime * 100000, 10, 100));
+        // timer += deltaTime;
+        // if (timer >= 0.5) {
+        // value += (0.2f * counter);
+        // counter += 0.2f;
+        // timer = 0;
+        // }
 
         // timer += deltaTime;
 
-        // lerp = mksEngine.Math.lerp(getLocation(), new Vector2d(850, 0), deltaTime *
-        // 3);
+        lerp = lerp(getLocation(),
+                new Vector2d(targetX, targetY),
+                deltaTime);
 
-        // setLocation(lerp);
+        setLocation(lerp);
         // System.out.println(lerp);
     }
 
